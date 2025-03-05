@@ -1,16 +1,43 @@
 package cardgame.model;
 
-public class Card {
-    private String name;
-    private int damage;
-    private String elementType; // fire, water, normal
-    private boolean isSpell;    // true if spell-card, false if monster-card
+import java.util.UUID;
 
-    public Card(String name, int damage, String elementType, boolean isSpell) {
+public class Card {
+    private UUID id;
+    private String name;
+    private double damage;
+    private ElementType elementType;
+    private boolean isSpell;    // true = Spell, false = Monster
+
+    public enum ElementType {
+        FIRE, WATER, NORMAL
+    }
+
+    // Konstruktor mit automatischer UUID
+    public Card(String name, double damage, ElementType elementType, boolean isSpell) {
+        this.id = UUID.randomUUID(); // Automatisch generierte UUID
         this.name = name;
         this.damage = damage;
         this.elementType = elementType;
         this.isSpell = isSpell;
+    }
+
+    // Konstruktor mit existierender UUID (falls Karten aus DB geladen werden)
+    public Card(UUID id, String name, double damage, ElementType elementType, boolean isSpell) {
+        this.id = id;
+        this.name = name;
+        this.damage = damage;
+        this.elementType = elementType;
+        this.isSpell = isSpell;
+    }
+
+    // Getter & Setter
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -21,19 +48,19 @@ public class Card {
         this.name = name;
     }
 
-    public int getDamage() {
+    public double getDamage() {
         return damage;
     }
 
-    public void setDamage(int damage) {
+    public void setDamage(double damage) {
         this.damage = damage;
     }
 
-    public String getElementType() {
+    public ElementType getElementType() {
         return elementType;
     }
 
-    public void setElementType(String elementType) {
+    public void setElementType(ElementType elementType) {
         this.elementType = elementType;
     }
 
@@ -48,9 +75,10 @@ public class Card {
     @Override
     public String toString() {
         return "Card{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", damage=" + damage +
-                ", elementType='" + elementType + '\'' +
+                ", elementType=" + elementType +
                 ", isSpell=" + isSpell +
                 '}';
     }

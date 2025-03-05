@@ -82,6 +82,8 @@ public class Request {
         return pathname;
     }
 
+
+
     public void setPathname(String pathname) {
         this.pathname = pathname;
         String[] stringParts = pathname.split("/");

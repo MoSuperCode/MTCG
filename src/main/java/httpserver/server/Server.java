@@ -10,8 +10,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-    private int port;
-    private Router router;
+    private final int port;
+    private final Router router;
 
     public Server(int port, Router router) {
         this.port = port;

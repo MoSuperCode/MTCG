@@ -22,7 +22,7 @@ public class User {
         return username;
     }
 
-    // Hier habe ich einen Setter für den Benutzernamen hinzugefügt (falls du den Benutzernamen ändern möchtest)
+    // Hier habe ich einen Setter für den Benutzernamen hinzugefügt
     public void setUsername(String username) {
         this.username = username;
     }
@@ -32,7 +32,7 @@ public class User {
         return password;
     }
 
-    // Hier habe ich einen Setter für das Passwort hinzugefügt (z.B. falls du das Passwort ändern möchtest)
+    // Hier habe ich einen Setter für das Passwort hinzugefügt
     public void setPassword(String password) {
         this.password = password;
     }
@@ -47,7 +47,7 @@ public class User {
         this.token = token;
     }
 
-    // Optionale Methode, um den Benutzer als String darzustellen (für Debugging oder Logging)
+    // Optionale Methode, um den Benutzer als String darzustellen z.B für Logging
     @Override
     public String toString() {
         return "User{" +
