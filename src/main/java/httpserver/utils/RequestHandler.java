@@ -40,7 +40,7 @@ public class RequestHandler implements Runnable {
                         "[]"
                 );
             } else {
-                response = this.router.resolve(request.getServiceRoute()).handleRequest(request);
+                response = this.router.resolve(request.getPathname()).handleRequest(request);
             }
 
             // Log response before sending

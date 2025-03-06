@@ -28,4 +28,8 @@ public class HeaderMap {
     public void print() {
         System.out.println(headers);
     }
+
+    public String get(String key) {
+        return headers.get(key);
+    }
 }

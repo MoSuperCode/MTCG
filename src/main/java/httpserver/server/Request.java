@@ -17,6 +17,10 @@ public class Request {
     private HeaderMap headerMap = new HeaderMap();
     private String body;
 
+    public String getHeader(String key) {
+        return this.headerMap.get(key);
+    }
+
     // ObjectMapper zum Parsen von JSON
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -79,6 +83,7 @@ public class Request {
     }
 
     public String getPathname() {
+        System.out.println("🔍 getPathname() gibt zurück: " + this.pathname);
         return pathname;
     }
 

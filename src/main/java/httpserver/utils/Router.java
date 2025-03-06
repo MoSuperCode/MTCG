@@ -11,6 +11,7 @@ public class Router {
 
     public void addService(String route, Service service) {
         this.serviceRegistry.put(route, service);
+        System.out.println("✅ Route registriert: " + route);
     }
 
     public void removeService(String route) {
@@ -23,6 +24,7 @@ public class Router {
 
 
     public Service resolve(String route) {
+        System.out.println("🔍 Router sucht nach: " + route);
         Service service = this.serviceRegistry.get(route);
 
         if (service == null) {
