@@ -1,5 +1,7 @@
 import cardgame.controller.CardController;
+import cardgame.controller.PackageController;
 import cardgame.service.card.CardService;
+import cardgame.service.card.PackageService;
 import httpserver.server.Server;
 import httpserver.utils.Router;
 import cardgame.service.user.UserService;
@@ -44,11 +46,15 @@ public class Main {
         CardService cardService = new CardService();
         CardController cardController = new CardController(cardService);
 
+        PackageService packageService = new PackageService();
+        PackageController packageController = new PackageController(packageService);
+
 
         // 4️⃣ Services an die Routen binden
         router.addService("/users", userController);  // Registrierung und Login von Benutzern
         router.addService("/sessions", userController);  // Login von Benutzern
-        router.addService("/cards", cardController); //
+        router.addService("/cards", cardController); // route für cards
+        router.addService("/packages", packageController);
 
         System.out.println("🔍 Registrierte Routen: " + router.getRoutes());
 
