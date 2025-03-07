@@ -1,6 +1,6 @@
 package cardgame.controller;
 
-import cardgame.service.card.TransactionService;
+import cardgame.service.battle.BattleService;
 import httpserver.server.Request;
 import httpserver.server.Response;
 import httpserver.http.HttpStatus;
@@ -13,32 +13,32 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class TransactionController implements Service {
-    private final TransactionService transactionService;
+public class BattleController implements Service {
+    private final BattleService battleService;
 
-    public TransactionController(TransactionService transactionService) {
-        this.transactionService = transactionService;
+    public BattleController(BattleService battleService) {
+        this.battleService = battleService;
     }
 
     public Response handleRequest(Request request) {
         if ("POST".equalsIgnoreCase(request.getMethod().toString().trim())
-                && request.getPathname().equals("/transactions/packages")) {
-            return buyPackage(request);
+                && request.getPathname().equals("/battles")) {
+            return joinBattle(request);
         }
         return new Response(HttpStatus.NOT_FOUND, ContentType.JSON, "{\"error\":\"Not Found\"}");
     }
 
-    private Response buyPackage(Request request) {
+    private Response joinBattle(Request request) {
         int userId = getUserIdFromToken(request);
         if (userId == -1) {
             return new Response(HttpStatus.UNAUTHORIZED, ContentType.JSON, "{\"error\":\"Invalid token\"}");
         }
 
-        boolean success = transactionService.buyPackage(userId);
-        if (success) {
-            return new Response(HttpStatus.OK, ContentType.JSON, "{\"message\":\"Package gekauft!\"}");
+        boolean battleStarted = battleService.joinBattleQueue(userId);
+        if (battleStarted) {
+            return new Response(HttpStatus.OK, ContentType.JSON, "{\"message\":\"Match gefunden!\"}");
         } else {
-            return new Response(HttpStatus.BAD_REQUEST, ContentType.JSON, "{\"error\":\"Not enough money or No Packages available\"}");
+            return new Response(HttpStatus.OK, ContentType.JSON, "{\"message\":\"Warte auf einen Gegner...\"}");
         }
     }
 

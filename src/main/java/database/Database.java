@@ -10,16 +10,13 @@ public class Database {
     private static final String user = "mo";
     private static final String password = "password";
 
-    public static Connection connect() {
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(url,user,password);
-            System.out.println("Connected to database successfully ✅");
-        } catch (SQLException e) {
-            System.out.println("Connection failed ❌");
-            e.printStackTrace();
-        }
-        return conn;
+    public static Connection connect() throws SQLException {
+        System.out.println("🔗 Verbinde zur Datenbank...");
+        Connection conn = DriverManager.getConnection(url, user, password);
+        System.out.println("✅ Verbindung erfolgreich!");
+
+        return conn;  // Falls erfolgreich, wird die Verbindung zurückgegeben.
     }
+
 
 }

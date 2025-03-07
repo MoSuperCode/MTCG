@@ -1,13 +1,12 @@
-import cardgame.controller.CardController;
-import cardgame.controller.PackageController;
-import cardgame.controller.TransactionController;
+import cardgame.controller.*;
+import cardgame.service.battle.BattleService;
 import cardgame.service.card.CardService;
+import cardgame.service.card.DeckService;
 import cardgame.service.card.PackageService;
 import cardgame.service.card.TransactionService;
 import httpserver.server.Server;
 import httpserver.utils.Router;
 import cardgame.service.user.UserService;
-import cardgame.controller.UserController;
 import database.Database; // NEU: Datenbankimport
 
 import java.io.IOException;
@@ -54,6 +53,11 @@ public class Main {
         TransactionService transactionService = new TransactionService();
         TransactionController transactionController = new TransactionController(transactionService);
 
+        DeckService deckService = new DeckService();
+        DeckController deckController = new DeckController(deckService);
+
+        BattleService battleService = new BattleService();
+        BattleController battleController = new BattleController(battleService);
 
 
         // 4️⃣ Services an die Routen binden
@@ -62,6 +66,8 @@ public class Main {
         router.addService("/cards", cardController); // route für cards
         router.addService("/packages", packageController);
         router.addService("/transactions/packages", transactionController);
+        router.addService("/deck", deckController);
+        router.addService("/battles", battleController);
 
         System.out.println("🔍 Registrierte Routen: " + router.getRoutes());
 

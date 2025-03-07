@@ -24,7 +24,7 @@ public class UserService {
 
         // Prüfen, ob der Benutzer schon existiert
         if (userExists(username)) {
-            return new Response(HttpStatus.CONFLICT, ContentType.JSON, "{\"error\":\"User existiert bereits\"}");
+            return new Response(HttpStatus.CONFLICT, ContentType.JSON, "{\"error\":\"User already exists\"}");
         }
 
         // Neuen Benutzer in DB speichern
@@ -45,7 +45,7 @@ public class UserService {
 
         User user = getUser(username);
         if (user == null || !user.getPassword().equals(password)) {
-            return new Response(HttpStatus.UNAUTHORIZED, ContentType.JSON, "{\"error\":\"Falsche Login-Daten\"}");
+            return new Response(HttpStatus.UNAUTHORIZED, ContentType.JSON, "{\"error\":\"Login failed\"}");
         }
 
         // Neuen Token generieren

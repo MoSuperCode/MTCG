@@ -1,17 +1,29 @@
 package cardgame.model;
 
 import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Card {
+    @JsonProperty("Id")
     private UUID id;
+
+    @JsonProperty("Name")
     private String name;
+
+    @JsonProperty("Damage")
     private double damage;
+
+    @JsonProperty("ElementType")
     private ElementType elementType;
-    private boolean isSpell;    // true = Spell, false = Monster
+
+    @JsonProperty("IsSpell")
+    private boolean isSpell;
 
     public enum ElementType {
         FIRE, WATER, NORMAL
     }
+
+
 
     // Konstruktor mit automatischer UUID
     public Card(String name, double damage, ElementType elementType, boolean isSpell) {
