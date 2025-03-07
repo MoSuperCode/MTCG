@@ -42,7 +42,7 @@ public class BattleController implements Service {
         }
     }
 
-    private int getUserIdFromToken(Request request) {
+    public int getUserIdFromToken(Request request) {
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return -1;

@@ -6,4 +6,9 @@ public enum Method {
     PUT,
     PATCH,
     DELETE,
+    ;
+
+    public String trim() {
+        return this.name().toLowerCase();
+    }
 }
