@@ -187,7 +187,7 @@ The unique feature implemented is an enhanced battle system with detailed battle
 
 ## Git Repository
 
-[Link to Git Repository](https://github.com/yourusername/MTCG)
+[Link to Git Repository](https://github.com/MoSuperCode/MTCG)
 
 ## Technical Steps and Solutions
 
