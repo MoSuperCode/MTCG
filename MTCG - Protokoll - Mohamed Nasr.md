@@ -43,6 +43,8 @@ The project follows a classic layered architecture:
                                     +------------------------+
 ```
 
+
+
 ### Key Design Decisions
 
 1. **Custom HTTP Server Implementation**
