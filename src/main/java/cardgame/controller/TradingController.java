@@ -213,19 +213,47 @@ public class TradingController implements Service {
 
     // Hilfsmethode: Prüfen, ob ein Benutzer eine Karte besitzt und ob sie nicht im Deck ist
     private boolean userOwnsCard(int userId, UUID cardId) {
-        String sql = "SELECT c.id FROM cards c " +
-                "WHERE c.id = ? AND c.owner_id = ? " +
-                "AND NOT EXISTS (SELECT 1 FROM user_deck ud WHERE ud.user_id = ? AND ud.card_id = ?)";
+        // First query: Just check if the user owns the card
+        String ownershipSql = "SELECT c.id FROM cards c WHERE c.id = ? AND c.owner_id = ?";
 
-        try (Connection conn = Database.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setObject(1, cardId);
-            stmt.setInt(2, userId);
-            stmt.setInt(3, userId);
-            stmt.setObject(4, cardId);
-            ResultSet rs = stmt.executeQuery();
-            return rs.next();
+        // Second query: Check if the card is in a deck
+        String deckSql = "SELECT 1 FROM user_deck ud WHERE ud.user_id = ? AND ud.card_id = ?";
+
+        try (Connection conn = Database.connect()) {
+            // Step 1: Check if user owns the card
+            boolean ownsCard = false;
+            try (PreparedStatement stmt = conn.prepareStatement(ownershipSql)) {
+                stmt.setObject(1, cardId);
+                stmt.setInt(2, userId);
+
+                ResultSet rs = stmt.executeQuery();
+                ownsCard = rs.next();
+            }
+
+            if (!ownsCard) {
+                System.out.println("❌ User " + userId + " does not own card " + cardId);
+                return false;
+            }
+
+            // Step 2: Check if card is in a deck (should NOT be in a deck for trading)
+            boolean inDeck = false;
+            try (PreparedStatement stmt = conn.prepareStatement(deckSql)) {
+                stmt.setInt(1, userId);
+                stmt.setObject(2, cardId);
+
+                ResultSet rs = stmt.executeQuery();
+                inDeck = rs.next();
+            }
+
+            if (inDeck) {
+                System.out.println("❌ Card " + cardId + " is in user's deck and cannot be traded");
+                return false;
+            }
+
+            System.out.println("✅ User " + userId + " owns card " + cardId + " and it's available for trading");
+            return true;
         } catch (SQLException e) {
+            System.err.println("❌ SQL error in userOwnsCard: " + e.getMessage());
             e.printStackTrace();
             return false;
         }

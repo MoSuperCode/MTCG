@@ -5,10 +5,13 @@ import cardgame.service.card.DeckService;
 import cardgame.service.card.PackageService;
 import cardgame.service.card.TransactionService;
 import cardgame.service.trading.TradingService;
+import cardgame.service.user.UserProfileService;
+import cardgame.service.user.StatsService;
+import cardgame.service.user.ScoreboardService;
 import httpserver.server.Server;
 import httpserver.utils.Router;
 import cardgame.service.user.UserService;
-import database.Database; // NEU: Datenbankimport
+import database.Database;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -63,6 +66,16 @@ public class Main {
         TradingService tradingService = new TradingService();
         TradingController tradingController = new TradingController(tradingService);
 
+        // New services for user profiles, stats, and scoreboard
+        UserProfileService userProfileService = new UserProfileService();
+        UserProfileController userProfileController = new UserProfileController(userProfileService);
+
+        StatsService statsService = new StatsService();
+        StatsController statsController = new StatsController(statsService);
+
+        ScoreboardService scoreboardService = new ScoreboardService();
+        ScoreboardController scoreboardController = new ScoreboardController(scoreboardService);
+
         // 4️⃣ Services an die Routen binden
         router.addService("/users", userController);
         router.addService("/sessions", userController);
@@ -76,6 +89,10 @@ public class Main {
         router.addService("/tradings", tradingController);
         router.addService("/tradings/", tradingController); // Damit es /tradings/<id> korrekt abfängt
 
+        // 📌 Neue Routes für User Profiles, Stats und Scoreboard
+        router.addService("/users/", userProfileController);
+        router.addService("/stats", statsController);
+        router.addService("/scoreboard", scoreboardController);
 
         System.out.println("🔍 Registrierte Routen: " + router.getRoutes());
 
