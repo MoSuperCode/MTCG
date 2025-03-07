@@ -4,6 +4,7 @@ import cardgame.service.card.CardService;
 import cardgame.service.card.DeckService;
 import cardgame.service.card.PackageService;
 import cardgame.service.card.TransactionService;
+import cardgame.service.trading.TradingService;
 import httpserver.server.Server;
 import httpserver.utils.Router;
 import cardgame.service.user.UserService;
@@ -27,7 +28,7 @@ public class Main {
             return;
         }
 
-        // 2️⃣  Server starten, wenn die Datenbankverbindung erfolgreich ist
+        // 2️⃣ Server starten, wenn die Datenbankverbindung erfolgreich ist
         Server server = new Server(10001, configureRouter());
         try {
             System.out.println("🚀 Server wird gestartet auf Port 10001...");
@@ -40,7 +41,7 @@ public class Main {
     private static Router configureRouter() {
         Router router = new Router();
 
-        // 3️⃣ UserService erstelle mit Datenbankintegration
+        // 3️⃣ Services und Controller erstellen
         UserService userService = new UserService();
         UserController userController = new UserController(userService);
 
@@ -59,18 +60,24 @@ public class Main {
         BattleService battleService = new BattleService();
         BattleController battleController = new BattleController(battleService);
 
+        TradingService tradingService = new TradingService();
+        TradingController tradingController = new TradingController(tradingService);
 
         // 4️⃣ Services an die Routen binden
-        router.addService("/users", userController);  // Registrierung und Login von Benutzern
-        router.addService("/sessions", userController);  // Login von Benutzern
-        router.addService("/cards", cardController); // route für cards
+        router.addService("/users", userController);
+        router.addService("/sessions", userController);
+        router.addService("/cards", cardController);
         router.addService("/packages", packageController);
         router.addService("/transactions/packages", transactionController);
         router.addService("/deck", deckController);
         router.addService("/battles", battleController);
 
-        System.out.println("🔍 Registrierte Routen: " + router.getRoutes());
+        // 📌 Sicherstellen, dass alle Handelsrouten erreichbar sind
+        router.addService("/tradings", tradingController);
+        router.addService("/tradings/", tradingController); // Damit es /tradings/<id> korrekt abfängt
 
+
+        System.out.println("🔍 Registrierte Routen: " + router.getRoutes());
 
         return router;
     }
