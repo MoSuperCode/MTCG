@@ -10,6 +10,7 @@ import httpserver.server.Request;
 import httpserver.server.Response;
 import httpserver.http.HttpStatus;
 import httpserver.http.ContentType;
+import cardgame.service.battle.BattleResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -46,12 +47,15 @@ class BattleControllerTest {
 
         BattleController spyController = spy(battleController);
         doReturn(1).when(spyController).getUserIdFromToken(request);
-        when(battleService.joinBattleQueue(1)).thenReturn(true);
+
+        // Erstelle ein BattleResult-Objekt statt eines boolean
+        BattleResult battleResult = new BattleResult(true, "Battle log here");
+        when(battleService.joinBattleQueue(1)).thenReturn(battleResult);
 
         Response response = spyController.handleRequest(request);
 
         assertEquals("HTTP/1.1 200 OK", response.get().split("\r\n")[0]);
-        assertTrue(response.get().contains("{\"message\":\"Match gefunden!\"}"));
+        assertTrue(response.getContent().contains("Match found!"));
     }
 
     @Test
@@ -62,14 +66,16 @@ class BattleControllerTest {
 
         BattleController spyController = spy(battleController);
         doReturn(1).when(spyController).getUserIdFromToken(request);
-        when(battleService.joinBattleQueue(1)).thenReturn(false);
+
+        // Erstelle ein BattleResult-Objekt statt eines boolean
+        BattleResult battleResult = new BattleResult(false, null);
+        when(battleService.joinBattleQueue(1)).thenReturn(battleResult);
 
         Response response = spyController.handleRequest(request);
 
         assertEquals("HTTP/1.1 200 OK", response.get().split("\r\n")[0]);
-        assertTrue(response.get().contains("{\"message\":\"Warte auf einen Gegner...\"}"));
+        assertTrue(response.get().contains("{\"message\":\"Waiting for an opponent...\"}"));
     }
-
     @Test
     void testHandleRequest_JoinBattle_InvalidToken() {
         Request request = mock(Request.class);
